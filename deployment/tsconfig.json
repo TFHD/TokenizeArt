@@ -1,0 +1,10 @@
+{
+    "extends": "../code/token/tsconfig.json",
+    "compilerOptions": {
+      "module": "ESNext",
+      "moduleResolution": "bundler",
+      "verbatimModuleSyntax": true,
+      "typeRoots": ["../code/token/node_modules/@types"]
+    },
+    "include": ["./**/*.ts"]
+}
