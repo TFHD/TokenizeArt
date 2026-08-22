@@ -69,14 +69,12 @@ function parseError(error: unknown): string {
 		message?: string;
 	};
 
-	if (e.code === 4001 || e.code === 'ACTION_REJECTED') {
+	if (e.code === 4001 || e.code === 'ACTION_REJECTED')
 		return 'Action annulée dans MetaMask.';
-	}
 
 	const text = `${e.shortMessage ?? ''} ${e.reason ?? ''} ${e.message ?? ''}`;
-	if (text.includes('OwnableUnauthorizedAccount') || text.includes('Ownable')) {
+	if (text.includes('OwnableUnauthorizedAccount') || text.includes('Ownable'))
 		return 'Seul le propriétaire du contrat peut minter.';
-	}
 
 	if (e.shortMessage) return e.shortMessage;
 	if (e.reason) return e.reason;
@@ -109,26 +107,20 @@ function onAccountsChanged(accounts: unknown) {
 	const list = Array.isArray(accounts) ? (accounts as string[]) : [];
 	wallet.account = list[0] ?? null;
 	wallet.error = null;
-	if (wallet.account && wallet.chainId === SEPOLIA.chainId) {
-		void refreshContract();
-	}
+	if (wallet.account && wallet.chainId === SEPOLIA.chainId) void refreshContract();
 }
 
 function onChainChanged(chainId: unknown) {
 	wallet.chainId = typeof chainId === 'string' ? Number.parseInt(chainId, 16) : null;
 	wallet.error = null;
-	if (wallet.account && wallet.chainId === SEPOLIA.chainId) {
-		void refreshContract();
-	}
+	if (wallet.account && wallet.chainId === SEPOLIA.chainId) void refreshContract();
 }
 
 async function sync(provider: BrowserProvider) {
 	const signer = await provider.getSigner();
 	wallet.account = await signer.getAddress();
 	wallet.chainId = Number((await provider.getNetwork()).chainId);
-	if (wallet.chainId === SEPOLIA.chainId) {
-		await refreshContract();
-	}
+	if (wallet.chainId === SEPOLIA.chainId) await refreshContract();
 }
 
 function listen() {
